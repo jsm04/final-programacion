@@ -69,8 +69,8 @@ def update_movie(movie_id: int, movie: MovieUpdate, db: SessionDep):
     description="Delete a movie from the system.",
 )
 def delete_movie(movie_id: int, db: SessionDep):
-    movie_service.delete_movie(db, movie_id)
-    return None
+    return movie_service.delete_movie(db, movie_id)
+
 
 
 # TMDB ROUTES
