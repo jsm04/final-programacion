@@ -25,6 +25,7 @@ class UserCreate(UserBase):
 class UserUpdate(BaseModel):
     username: Optional[str] = None
     email: Optional[EmailStr] = None
+    full_name: Optional[str] = None
     is_active: Optional[bool] = None
 
     class Config:
@@ -32,6 +33,7 @@ class UserUpdate(BaseModel):
             "example": {
                 "username": "newusername",
                 "email": "newemail@example.com",
+                "full_name": "New Full Name",
                 "is_active": True,
             }
         }

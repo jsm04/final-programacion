@@ -4,6 +4,7 @@ import uvicorn
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, Response
+from contextlib import asynccontextmanager
 import requests
 
 from app import PORT
@@ -15,12 +16,14 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-def create_app() -> FastAPI:
-    server = FastAPI(title="Final programacion Movie Backend API")
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    create_db_and_tables()
+    yield
 
-    @server.on_event("startup")
-    def on_startup():
-        create_db_and_tables()
+
+def create_app() -> FastAPI:
+    server = FastAPI(title="Final programacion Movie Backend API", lifespan=lifespan)
 
     server.add_middleware(
         CORSMiddleware,
@@ -67,9 +70,9 @@ app = create_app()
 if __name__ == "__main__":
     try:
         uvicorn.run(
-            "app.main:app",
+            "main:app",
             port=PORT,
-            reload=True,
+            reload=False,
         )
     except OSError as e:
         logger.critical("OS error while starting server: %s", e, exc_info=True)
